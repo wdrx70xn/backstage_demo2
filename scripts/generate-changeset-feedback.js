@@ -73,7 +73,9 @@ async function listChangedFiles(ref) {
 }
 
 async function listPackages() {
-  const { stdout } = await execFile('yarn', ['-s', 'workspaces', 'info']);
+  const { stdout } = await execFile('yarn', ['-s', 'workspaces', 'info'], {
+    env: { ...process.env, PATH: `.:${process.env.PATH}` },
+  });
   return Object.entries(JSON.parse(stdout)).map(([name, info]) => ({
     name,
     path: info.location,
